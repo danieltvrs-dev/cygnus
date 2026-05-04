@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus Kids</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:     #08061A;
+    --bg2:    #0D0B22;
+    --bg3:    #13112E;
+    --yellow: #FFD60A;
+    --pink:   #FF6B9D;
+    --blue:   #4FC3F7;
+    --green:  #4ADE80;
+    --purple: #A78BFA;
+    --orange: #FB923C;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ══ SPARKLES ══ */
+  .sparkles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .sparkle {
+    position: absolute;
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity:0; transform:scale(0) rotate(0deg); }
+    50%      { opacity:1; transform:scale(1) rotate(180deg); }
+  }
+
+  /* ══ NAV ══ */
+  .kids-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    background: linear-gradient(to bottom, rgba(8,6,26,0.96) 0%, transparent 100%);
+    backdrop-filter: blur(8px);
+  }
+
+  .kids-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .kids-logo img {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    filter: drop-shadow(0 0 10px rgba(255,214,10,0.5));
+  }
+  .kids-logo-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .kids-logo-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.88rem;
+    letter-spacing: 0.45em;
+    text-indent: 0.45em;
+    color: rgba(255,255,255,0.7);
+  }
+  .kids-badge {
+    background: linear-gradient(135deg, #FFD60A 0%, #FF6B9D 100%);
+    color: #08061A;
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+
+  .kids-greeting {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+  }
+  .kids-greeting span { color: var(--yellow); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .profile-thumb {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    object-fit: contain;
+    background: #1a1a2e;
+    border: 2px solid rgba(255,255,255,0.15);
+  }
+  .btn-switch {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 99px;
+    padding: 7px 18px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-switch:hover { background: rgba(255,255,255,0.13); color: #fff; }
+
+  /* ══ HERO ══ */
+  .kids-hero {
+    position: relative;
+    height: 100vh;
+    min-height: 580px;
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 90px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    transition: background-image 0.8s ease;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right,  rgba(8,6,26,0.92) 0%, rgba(8,6,26,0.45) 55%, rgba(8,6,26,0.1) 100%),
+      linear-gradient(to top,    rgba(8,6,26,0.98) 0%, rgba(8,6,26,0.4)  35%, transparent 65%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 0 60px;
+    max-width: 640px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255,214,10,0.1);
+    border: 1px solid rgba(255,214,10,0.25);
+    border-radius: 99px;
+    padding: 5px 14px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--yellow);
+    letter-spacing: 0.07em;
+    margin-bottom: 18px;
+  }
+
+  .hero-title-text {
+    font-size: clamp(2.6rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+    text-shadow: 0 4px 28px rgba(0,0,0,0.6);
+  }
+
+  .hero-logo {
+    max-width: min(440px, 70%);
+    max-height: 130px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.9)) drop-shadow(0 2px 8px rgba(0,0,0,0.7));
+    margin-bottom: 14px;
+    display: block;
+    animation: logoIn 0.5s ease;
+  }
+  @keyframes logoIn {
+    from { opacity:0; transform:translateY(8px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .hero-desc {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    margin-bottom: 30px;
+    max-width: 470px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-watch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--yellow);
+    color: #08061A;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 30px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 24px rgba(255,214,10,0.35);
+  }
+  .btn-watch:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,214,10,0.5); }
+
+  .btn-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 14px;
+    padding: 14px 24px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-info:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+  /* ══ CONTEÚDO ══ */
+  .kids-content {
+    position: relative;
+    z-index: 10;
+    padding-bottom: 80px;
+  }
+
+  .kids-row { margin-bottom: 44px; }
+
+  .row-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 48px;
+    margin-bottom: 20px;
+  }
+
+  .row-icon { display:flex; align-items:center; flex-shrink:0; }
+
+  .row-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  /* Gradientes por linha */
+  .row-hot    .row-title { background: linear-gradient(90deg, #FF6B35, #FF6B9D); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .row-anime  .row-title { background: linear-gradient(90deg, #4FC3F7, #A78BFA); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .row-series .row-title { background: linear-gradient(90deg, #4ADE80, #06B6D4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .row-family .row-title { background: linear-gradient(90deg, #FFD60A, #FB923C); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+  .kids-carousel {
+    display: flex;
+    gap: 14px;
+    padding: 6px 48px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+  }
+  .kids-carousel::-webkit-scrollbar { display: none; }
+  .kids-carousel.dragging { cursor: grabbing; }
+
+  .kids-card {
+    flex-shrink: 0;
+    width: 154px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    background: var(--bg3);
+  }
+
+  .kids-card:hover { transform: translateY(-8px) scale(1.03); }
+  .row-hot    .kids-card:hover { box-shadow: 0 16px 48px rgba(255,107,157,0.35); }
+  .row-anime  .kids-card:hover { box-shadow: 0 16px 48px rgba(79,195,247,0.3);  }
+  .row-series .kids-card:hover { box-shadow: 0 16px 48px rgba(74,222,128,0.3);  }
+  .row-family .kids-card:hover { box-shadow: 0 16px 48px rgba(255,214,10,0.3);  }
+
+  .kids-card img {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8,6,26,0.96) 0%, rgba(8,6,26,0.3) 45%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 14px;
+    gap: 8px;
+  }
+  .kids-card:hover .card-overlay { opacity: 1; }
+
+  .card-title {
+    font-size: 0.77rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .card-play {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--yellow);
+    display: flex; align-items: center; justify-content: center;
+    color: #08061A;
+    font-size: 0.7rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+    box-shadow: 0 4px 12px rgba(255,214,10,0.4);
+  }
+  .kids-card:hover .card-play { transform: scale(1.12); }
+
+  /* Skeleton loader */
+  .kids-card.skeleton img { display:none; }
+  .kids-card.skeleton::after {
+    content: '';
+    display: block;
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: linear-gradient(90deg, var(--bg3) 25%, var(--bg2) 50%, var(--bg3) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 16px;
+  }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position:-200% 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sparkles" id="sparkles"></div>
+
+<!-- NAV -->
+<nav class="kids-nav">
+  <a href="profiles.html" class="kids-logo">
+    <img src="assets/images/logo.png" alt="Cygnus">
+    <div class="kids-logo-text">
+      <span class="kids-logo-name">CYGNUS</span>
+      <span class="kids-badge">KIDS</span>
+    </div>
+  </a>
+
+  <span class="kids-greeting" id="greeting">Olá!</span>
+
+  <div class="nav-right">
+    <img class="profile-thumb" id="profileThumb"
+      src="https://api.dicebear.com/7.x/adventurer/svg?seed=kids&backgroundColor=b6e3f4&radius=10"
+      alt="Perfil">
+    <button class="btn-switch" onclick="window.location.href='profiles.html'">Trocar perfil</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="kids-hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+      Destaque do dia
+    </div>
+    <div id="heroTitleWrap">
+      <h1 class="hero-title-text" id="heroTitle"></h1>
+    </div>
+    <p class="hero-desc" id="heroDesc"></p>
+    <div class="hero-actions">
+      <button class="btn-watch" id="btnWatch" onclick="watchHero()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Assistir
+      </button>
+      <button class="btn-info" onclick="infoHero()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 16v-4M12 8h.01"/></svg>
+        Mais detalhes
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ROWS -->
+<div class="kids-content">
+
+  <div class="kids-row row-hot">
+    <div class="row-header">
+      <span class="row-icon">
+        <!-- Flame -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#FF6B35" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+        </svg>
+      </span>
+      <h2 class="row-title">Em Alta</h2>
+    </div>
+    <div class="kids-carousel" id="row-hot"></div>
+  </div>
+
+  <div class="kids-row row-anime">
+    <div class="row-header">
+      <span class="row-icon">
+        <!-- Magic wand -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#4FC3F7" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a.9959.9959 0 00-1.41 0L1.29 18.96c-.39.39-.39 1.02 0 1.41l2.34 2.34c.39.39 1.02.39 1.41 0L16.7 11.05c.39-.39.39-1.02 0-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/>
+        </svg>
+      </span>
+      <h2 class="row-title">Animações</h2>
+    </div>
+    <div class="kids-carousel" id="row-anime"></div>
+  </div>
+
+  <div class="kids-row row-series">
+    <div class="row-header">
+      <span class="row-icon">
+        <!-- Monitor / TV -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#4ADE80" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/>
+        </svg>
+      </span>
+      <h2 class="row-title">Séries</h2>
+    </div>
+    <div class="kids-carousel" id="row-series"></div>
+  </div>
+
+  <div class="kids-row row-family">
+    <div class="row-header">
+      <span class="row-icon">
+        <!-- Star / sparkle -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFD60A" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+      </span>
+      <h2 class="row-title">Para a Família</h2>
+    </div>
+    <div class="kids-carousel" id="row-family"></div>
+  </div>
+
+</div>
+
+<script src="js/utils/storage.js"></script>
+<script src="js/api/tmdb.js"></script>
+<script>
+/* ── Perfil ── */
+const profile = Storage.getProfile?.();
+if (profile?.name) {
+  document.getElementById('greeting').innerHTML = `Olá, <span>${profile.name}</span>!`;
+}
+if (profile?.avatar) {
+  document.getElementById('profileThumb').src = profile.avatar;
+}
+
+/* ── Hero state ── */
+let _heroId = null, _heroType = 'movie';
+
+/* ── Sparkles ── */
+(function buildSparkles() {
+  const container = document.getElementById('sparkles');
+  const colors = ['#FFD60A','#FF6B9D','#4FC3F7','#A78BFA','#4ADE80','#FB923C','#fff'];
+  for (let i = 0; i < 55; i++) {
+    const s    = document.createElement('div');
+    s.className = 'sparkle';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = [
+      `width:${size}px`,
+      `height:${size}px`,
+      `left:${Math.random()*100}%`,
+      `top:${Math.random()*100}%`,
+      `background:${colors[i % colors.length]}`,
+      `animation-duration:${(Math.random()*4+2).toFixed(1)}s`,
+      `animation-delay:${(Math.random()*5).toFixed(1)}s`,
+    ].join(';');
+    container.appendChild(s);
+  }
+})();
+
+/* ── Dark logo detection ── */
+function isLogoDark(img) {
+  try {
+    const canvas = document.createElement('canvas');
+    const ctx    = canvas.getContext('2d');
+    const w = Math.min(img.naturalWidth  || 200, 200);
+    const h = Math.min(img.naturalHeight || 100, 100);
+    canvas.width = w; canvas.height = h;
+    ctx.drawImage(img, 0, 0, w, h);
+    const data = ctx.getImageData(0, 0, w, h).data;
+    let dark = 0, total = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i+3] < 20) continue;
+      total++;
+      const r = data[i], g = data[i+1], b = data[i+2];
+      if ((r+g+b)/3 < 60 && Math.max(r,g,b) - Math.min(r,g,b) < 30) dark++;
+    }
+    return total > 0 && dark/total > 0.75;
+  } catch { return false; }
+}
+
+/* ── Logo PT-BR no hero ── */
+async function applyHeroLogo(id, type) {
+  try {
+    const data  = await TMDB.get(`${type}/${id}/images?include_image_language=pt-BR,pt,en,null`);
+    const logos = data.logos || [];
+    const best  = logos.find(l => l.iso_639_1 === 'pt' && l.iso_3166_1 === 'BR')
+               || logos.find(l => l.iso_639_1 === 'pt')
+               || logos.find(l => l.iso_639_1 === 'en')
+               || logos[0];
+    if (!best) return;
+    const logoUrl = TMDB.img(best.file_path, 'w500');
+    const titleEl = document.getElementById('heroTitle');
+    if (!titleEl) return;
+    const img     = document.createElement('img');
+    img.className = 'hero-logo';
+    img.alt       = titleEl.textContent;
+    img.onerror   = () => img.replaceWith(titleEl);
+    img.onload    = () => {
+      titleEl.replaceWith(img);
+      const probe = new Image();
+      probe.crossOrigin = 'anonymous';
+      probe.onload  = () => { if (isLogoDark(probe)) img.style.filter = 'brightness(0) invert(1) drop-shadow(0 2px 12px rgba(0,0,0,0.5))'; };
+      probe.onerror = () => {};
+      probe.src = logoUrl + '?_=1';
+    };
+    img.src = logoUrl;
+  } catch {}
+}
+
+/* ── Define hero ── */
+function setHero(m, type) {
+  _heroId   = m.id;
+  _heroType = type;
+  const bg  = m.backdrop_path ? TMDB.img(m.backdrop_path, 'original') : '';
+  document.getElementById('heroBg').style.backgroundImage = `url('${bg}')`;
+  document.getElementById('heroTitle').textContent = m.title || m.name || '';
+  document.getElementById('heroDesc').textContent  = m.overview || '';
+  applyHeroLogo(m.id, type);
+}
+
+function watchHero() {
+  if (!_heroId) return;
+  window.location.href = `player.html?id=${_heroId}&type=${_heroType}`;
+}
+function infoHero() {
+  if (!_heroId) return;
+  window.location.href = `details.html?id=${_heroId}&type=${_heroType}`;
+}
+
+/* ── Drag scroll ── */
+function dragScroll(el) {
+  let isDown = false, startX, scrollLeft;
+  el.addEventListener('mousedown',  e => { isDown = true; el.classList.add('dragging'); startX = e.pageX - el.offsetLeft; scrollLeft = el.scrollLeft; });
+  el.addEventListener('mouseleave', () => { isDown = false; el.classList.remove('dragging'); });
+  el.addEventListener('mouseup',    () => { isDown = false; el.classList.remove('dragging'); });
+  el.addEventListener('mousemove',  e => {
+    if (!isDown) return;
+    e.preventDefault();
+    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.5;
+  });
+}
+
+/* ── Placeholder SVG ── */
+const PLACEHOLDER = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 154 231'%3E%3Crect width='154' height='231' fill='%2313112E'/%3E%3C/svg%3E`;
+
+/* ── Constrói card ── */
+function buildCard(m, type) {
+  const poster = m.poster_path ? TMDB.img(m.poster_path, 'w342') : PLACEHOLDER;
+  const title  = m.title || m.name || '';
+  const card   = document.createElement('div');
+  card.className = 'kids-card';
+  card.onclick   = () => { window.location.href = `details.html?id=${m.id}&type=${type}`; };
+  card.innerHTML = `
+    <img src="${poster}" alt="${title}" loading="lazy"
+      onerror="this.src='${PLACEHOLDER}'">
+    <div class="card-overlay">
+      <div class="card-title">${title}</div>
+      <div class="card-play">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>`;
+  return card;
+}
+
+/* ── Preenche carrossel ── */
+function fillRow(id, items, type) {
+  const el = document.getElementById(id);
+  if (!el || !items.length) return;
+  el.innerHTML = '';
+  items.forEach(m => el.appendChild(buildCard(m, type)));
+  dragScroll(el);
+}
+
+/* ── Skeletons enquanto carrega ── */
+function showSkeletons() {
+  ['row-hot','row-anime','row-series','row-family'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+      const c = document.createElement('div');
+      c.className = 'kids-card skeleton';
+      c.innerHTML = '<img>';
+      el.appendChild(c);
+    }
+  });
+}
+
+/* ── Init ── */
+async function init() {
+  showSkeletons();
+
+  const [trendRes, animeRes, seriesRes, familyRes] = await Promise.all([
+    TMDB.get('trending/all/week?page=1'),
+    TMDB.get('discover/movie?with_genres=16&sort_by=popularity.desc&page=1'),
+    TMDB.get('discover/tv?with_genres=16&sort_by=popularity.desc&page=1'),
+    TMDB.get('discover/movie?with_genres=10751&sort_by=popularity.desc&page=1'),
+  ]);
+
+  const KIDS_GENRES = new Set([16, 10751, 10762]);
+
+  /* Em Alta: trending filtrado por gêneros infantis */
+  const hotItems = (trendRes.results || [])
+    .filter(m => m.poster_path && (m.genre_ids || []).some(g => KIDS_GENRES.has(g)));
+
+  const animeMovies  = (animeRes.results  || []).filter(m => m.poster_path);
+  const seriesItems  = (seriesRes.results || []).filter(m => m.poster_path);
+  const familyMovies = (familyRes.results || []).filter(m => m.poster_path);
+
+  /* Hero: anime movie com backdrop */
+  const heroCandidate = [...animeMovies, ...familyMovies].find(m => m.backdrop_path && m.overview);
+  if (heroCandidate) setHero(heroCandidate, 'movie');
+
+  fillRow('row-hot',    hotItems.slice(0, 16),    m => m.media_type || 'movie');
+  fillRow('row-anime',  animeMovies.slice(0, 16),  'movie');
+  fillRow('row-series', seriesItems.slice(0, 16),  'tv');
+  fillRow('row-family', familyMovies.slice(0, 16), 'movie');
+
+  /* row-hot tem mixed types */
+  const hotEl = document.getElementById('row-hot');
+  if (hotEl) {
+    hotEl.innerHTML = '';
+    hotItems.slice(0, 16).forEach(m => hotEl.appendChild(buildCard(m, m.media_type || 'movie')));
+    dragScroll(hotEl);
+  }
+}
+
+init();
+</script>
+</body>
+</html>

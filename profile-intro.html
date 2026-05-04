@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: #07070D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  /* ── Kids mode ── */
+  body.kids { background: #08061A; }
+
+  /* ── Brilho de fundo ── */
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    background: radial-gradient(ellipse 55% 45% at 50% 50%,
+      var(--glow-color, rgba(245,197,24,0.07)) 0%, transparent 70%);
+  }
+  body.ready .bg-glow { opacity: 1; }
+
+  /* ── Container central ── */
+  .intro-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ── Avatar ── */
+  .avatar-stage {
+    position: relative;
+    margin-bottom: 30px;
+  }
+
+  /* Anel externo pulsante */
+  .avatar-ring {
+    position: absolute;
+    inset: -18px;
+    border-radius: 28px;
+    border: 2px solid var(--ring-color, rgba(245,197,24,0.5));
+    opacity: 0;
+    transform: scale(0.85);
+    box-shadow: 0 0 28px var(--ring-glow, rgba(245,197,24,0.2));
+  }
+
+  /* Anel interno */
+  .avatar-ring-inner {
+    position: absolute;
+    inset: -8px;
+    border-radius: 20px;
+    border: 1.5px solid var(--ring-color, rgba(245,197,24,0.25));
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  .avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    object-fit: contain;
+    background: #1a1a2e;
+    display: block;
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  /* ── Nome ── */
+  .profile-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(6px);
+    margin-bottom: 8px;
+  }
+
+  /* ── Subtítulo ── */
+  .profile-sub {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.06em;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  /* ── Animações de entrada ── */
+  body.ready .avatar-img {
+    animation: avatarIn 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.1s forwards;
+  }
+  body.ready .avatar-ring {
+    animation: ringIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.35s forwards,
+               ringPulse 2s ease-in-out 0.9s infinite;
+  }
+  body.ready .avatar-ring-inner {
+    animation: ringIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.5s forwards;
+  }
+  body.ready .profile-name {
+    animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.55s forwards;
+  }
+  body.ready .profile-sub {
+    animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.7s forwards;
+  }
+
+  @keyframes avatarIn {
+    to { opacity:1; transform:scale(1); }
+  }
+  @keyframes ringIn {
+    to { opacity:1; transform:scale(1); }
+  }
+  @keyframes ringPulse {
+    0%, 100% { box-shadow: 0 0 20px var(--ring-glow, rgba(245,197,24,0.2)); }
+    50%       { box-shadow: 0 0 40px var(--ring-glow, rgba(245,197,24,0.4)); }
+  }
+  @keyframes slideUp {
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── Saída ── */
+  body.exiting {
+    animation: pageOut 0.5s ease forwards;
+  }
+  @keyframes pageOut {
+    to { opacity:0; transform:scale(1.04); }
+  }
+
+  /* ── Pontinhos de loading ── */
+  .dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 36px;
+    opacity: 0;
+    animation: dotsIn 0.4s ease 1s forwards;
+  }
+  @keyframes dotsIn { to { opacity:1; } }
+
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    animation: dotBounce 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(1) { animation-delay: 0s; }
+  .dot:nth-child(2) { animation-delay: 0.18s; }
+  .dot:nth-child(3) { animation-delay: 0.36s; }
+
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform:scale(1);   background:rgba(255,255,255,0.2); }
+    40%            { transform:scale(1.5); background:var(--ring-color, rgba(245,197,24,0.7)); }
+  }
+
+  /* ── Kids: estrelinhas decorativas ── */
+  .kids-stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    display: none;
+  }
+  body.kids .kids-stars { display: block; }
+
+  .kstar {
+    position: absolute;
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity:0; transform:scale(0); }
+    50%      { opacity:1; transform:scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="kids-stars" id="kstars"></div>
+
+<div class="intro-wrap">
+  <div class="avatar-stage">
+    <div class="avatar-ring"></div>
+    <div class="avatar-ring-inner"></div>
+    <img class="avatar-img" id="avatarImg" src="" alt="">
+  </div>
+  <div class="profile-name" id="profileName"></div>
+  <div class="profile-sub"  id="profileSub">Entrando…</div>
+  <div class="dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<script src="js/utils/storage.js"></script>
+<script>
+const profile = Storage.getProfile?.() || {};
+const isKids  = !!profile.isKids;
+
+/* ── Aplica dados do perfil ── */
+document.getElementById('avatarImg').src = profile.avatar || '';
+document.getElementById('profileName').textContent = profile.name || '';
+document.getElementById('profileSub').textContent  = isKids ? 'Modo Infantil' : 'Entrando…';
+
+/* ── Tema: adulto vs kids ── */
+if (isKids) {
+  document.body.classList.add('kids');
+  document.documentElement.style.setProperty('--ring-color',  'rgba(255,214,10,0.6)');
+  document.documentElement.style.setProperty('--ring-glow',   'rgba(255,214,10,0.3)');
+  document.documentElement.style.setProperty('--glow-color',  'rgba(255,107,157,0.08)');
+
+  /* Estrelinhas kids */
+  const colors = ['#FFD60A','#FF6B9D','#4FC3F7','#A78BFA','#4ADE80','#FB923C'];
+  const c = document.getElementById('kstars');
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('div');
+    s.className = 'kstar';
+    const sz = Math.random() * 3 + 1;
+    s.style.cssText = [
+      `width:${sz}px`, `height:${sz}px`,
+      `left:${Math.random()*100}%`,
+      `top:${Math.random()*100}%`,
+      `background:${colors[i % colors.length]}`,
+      `animation-duration:${(Math.random()*3+2).toFixed(1)}s`,
+      `animation-delay:${(Math.random()*3).toFixed(1)}s`,
+    ].join(';');
+    c.appendChild(s);
+  }
+} else {
+  document.documentElement.style.setProperty('--ring-color', 'rgba(245,197,24,0.55)');
+  document.documentElement.style.setProperty('--ring-glow',  'rgba(245,197,24,0.25)');
+  document.documentElement.style.setProperty('--glow-color', 'rgba(245,197,24,0.07)');
+}
+
+/* ── Dispara animações de entrada ── */
+requestAnimationFrame(() => document.body.classList.add('ready'));
+
+/* ── Redireciona após a splash ── */
+setTimeout(() => {
+  document.body.classList.add('exiting');
+  setTimeout(() => {
+    window.location.href = isKids ? 'home-kids.html' : 'home.html';
+  }, 480);
+}, 2400);
+</script>
+</body>
+</html>

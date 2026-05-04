@@ -1,0 +1,241 @@
+/* ============================================
+   CYGNUS — GLASS CSS
+   Classes reutilizáveis de glassmorphism
+   ============================================ */
+
+/* ============================================
+   GLASS BASE — fraco, médio, forte
+   ============================================ */
+
+/* Fraco — fundos sutis, seções */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border);
+}
+
+/* Médio — cards, painéis */
+.glass-md {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+/* Forte — modais, overlays */
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ============================================
+   GLASS CARD — para catálogo, destaques
+   ============================================ */
+.glass-card {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-strong);
+  border-color: rgba(245, 197, 24, 0.2);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transform: translateY(-4px);
+}
+
+/* ============================================
+   GLASS SIDEBAR
+   ============================================ */
+.glass-sidebar {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border-right: 1px solid var(--border-glass);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   GLASS MODAL
+   ============================================ */
+.glass-modal {
+  background: rgba(18, 18, 26, 0.92);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 0 60px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================
+   GLASS NAVBAR / TOPBAR
+   ============================================ */
+.glass-topbar {
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+/* ============================================
+   GLASS INPUT
+   ============================================ */
+.glass-input {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: all var(--transition-fast);
+}
+
+.glass-input::placeholder {
+  color: var(--text-muted);
+}
+
+.glass-input:focus {
+  border-color: rgba(245, 197, 24, 0.4);
+  background: var(--glass-bg-medium);
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.08);
+}
+
+/* ============================================
+   GLASS BUTTON
+   ============================================ */
+.glass-btn {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.glass-btn:hover {
+  background: var(--glass-bg-strong);
+  border-color: rgba(245, 197, 24, 0.3);
+  color: var(--accent-yellow);
+}
+
+/* ============================================
+   GLASS BADGE / TAG
+   ============================================ */
+.glass-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur-light);
+  -webkit-backdrop-filter: var(--glass-blur-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.glass-badge.accent {
+  border-color: rgba(245, 197, 24, 0.3);
+  color: var(--accent-yellow);
+  background: rgba(245, 197, 24, 0.08);
+}
+
+/* ============================================
+   GLASS OVERLAY — fundo de modal/player
+   ============================================ */
+.glass-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================
+   GLASS PLAYER CONTROLS
+   ============================================ */
+.glass-player-bar {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid var(--glass-border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 16px 24px;
+}
+
+/* ============================================
+   GLASS PROFILE CARD
+   ============================================ */
+.glass-profile-card {
+  background: var(--glass-bg-medium);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.glass-profile-card:hover {
+  border-color: var(--accent-yellow);
+  box-shadow: var(--shadow-glow);
+  transform: scale(1.04);
+}
+
+.glass-profile-card.active {
+  border-color: var(--accent-yellow);
+  box-shadow: var(--shadow-glow-md);
+}
+
+/* ============================================
+   GLOW ACCENT — brilho amarelo decorativo
+   ============================================ */
+.glow-accent {
+  box-shadow: var(--shadow-glow);
+}
+
+.glow-accent-md {
+  box-shadow: var(--shadow-glow-md);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(245, 197, 24, 0.5);
+}
+
+/* ============================================
+   DIVISOR GLASS
+   ============================================ */
+.glass-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border-glass),
+    transparent
+  );
+  border: none;
+  margin: 16px 0;
+}

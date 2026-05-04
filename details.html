@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus — Detalhes</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent:     #F5C518;
+    --accent-rgb: 245,197,24;
+    --accent-glow:rgba(245,197,24,0.25);
+    --bg:         #07070D;
+    --bg2:        #0E0E18;
+    --sidebar-w:  64px;
+    --header-h:   68px;
+    --t:          0.3s ease;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); font-family:'Outfit',sans-serif; color:#fff; overflow-x:hidden; }
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:99px; }
+
+  /* ══ HEADER ══ */
+  .header {
+    position:fixed; top:0; left:0; right:0;
+    height:var(--header-h); z-index:200;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px 0 20px;
+    background:rgba(7,7,13,0.95);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .header-left { display:flex; align-items:center; gap:20px; }
+  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo img { width:36px; height:36px; object-fit:contain; border-radius:8px; }
+  .logo-text { font-family:'Montserrat',sans-serif; font-weight:200; font-size:0.9rem; letter-spacing:0.5em; text-indent:0.5em; color:rgba(255,255,255,0.82); }
+  .back-btn { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.55); text-decoration:none; font-size:0.85rem; font-weight:500; padding:7px 14px; border-radius:8px; transition:all var(--t); border:1px solid rgba(255,255,255,0.08); }
+  .back-btn:hover { color:#fff; background:rgba(255,255,255,0.06); }
+  .profile-pill { display:flex; align-items:center; gap:8px; padding:4px 10px 4px 4px; border-radius:10px; cursor:pointer; text-decoration:none; transition:background var(--t); }
+  .profile-pill:hover { background:rgba(255,255,255,0.06); }
+  .profile-pill img { width:34px; height:34px; border-radius:7px; object-fit:cover; border:2px solid var(--accent); box-shadow:0 0 10px var(--accent-glow); }
+  .profile-pill span { font-size:0.82rem; font-weight:500; color:rgba(255,255,255,0.7); }
+
+  /* ══ SIDEBAR ══ */
+  .sidebar { position:fixed; left:0; top:var(--header-h); bottom:0; width:var(--sidebar-w); z-index:150; background:rgba(7,7,13,0.5); backdrop-filter:blur(16px); border-right:1px solid rgba(255,255,255,0.04); display:flex; flex-direction:column; padding:20px 0; transition:width var(--t); overflow:hidden; }
+  .sidebar:hover { width:220px; background:rgba(7,7,13,0.97); border-right-color:rgba(245,197,24,0.1); }
+  .sidebar-item { display:flex; align-items:center; gap:14px; padding:12px 20px; cursor:pointer; transition:all var(--t); white-space:nowrap; border-left:2px solid transparent; text-decoration:none; color:rgba(255,255,255,0.4); }
+  .sidebar-item:hover { color:#fff; background:rgba(255,255,255,0.05); border-left-color:var(--accent); }
+  .sidebar-icon { flex-shrink:0; width:26px; display:flex; align-items:center; justify-content:center; }
+  .sidebar-icon svg { width:18px; height:18px; }
+  .sidebar-label { font-size:0.85rem; font-weight:500; opacity:0; transition:opacity 0.2s ease; }
+  .sidebar:hover .sidebar-label { opacity:1; }
+  .sidebar-divider { height:1px; background:rgba(255,255,255,0.06); margin:10px 14px; }
+
+  /* ══ MAIN ══ */
+  .main { margin-left:var(--sidebar-w); padding-top:var(--header-h); }
+
+  /* ══ HERO ══ */
+  .movie-hero { position:relative; height:100vh; overflow:hidden; }
+  .movie-hero-bg { position:absolute; inset:0; background-size:cover; background-position:center top; transition:transform 8s ease; transform:scale(1.04); }
+  .movie-hero:hover .movie-hero-bg { transform:scale(1); }
+
+  /* Fallback: poster borrado quando não há backdrop */
+  .movie-hero.poster-bg .movie-hero-bg {
+    filter: blur(36px) brightness(0.22);
+    transform: scale(1.25);
+    background-position: center center;
+  }
+  .movie-hero.poster-bg:hover .movie-hero-bg { transform: scale(1.25); }
+  .movie-hero-overlay {
+    position:absolute; inset:0;
+    background:
+      linear-gradient(to right, rgba(7,7,13,0.98) 0%, rgba(7,7,13,0.75) 40%, rgba(7,7,13,0.25) 100%),
+      linear-gradient(to top, rgba(7,7,13,1) 0%, rgba(7,7,13,0.4) 25%, transparent 55%);
+  }
+
+  .movie-hero-content { position:absolute; bottom:90px; left:80px; right:44%; z-index:3; }
+
+  .movie-badges { display:flex; align-items:center; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .badge { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:6px; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+  .badge-genre  { background:rgba(var(--accent-rgb),0.12); border:1px solid rgba(var(--accent-rgb),0.25); color:var(--accent); transition:all 0.8s ease; }
+  .badge-rating { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.7); }
+  .badge-year   { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.45); }
+
+  .movie-title { font-size:clamp(2.8rem,5.5vw,5.2rem); font-weight:900; line-height:0.95; letter-spacing:-0.03em; color:#fff; margin-bottom:16px; text-shadow:0 4px 40px rgba(0,0,0,0.5); }
+  .movie-logo { max-width:min(500px,72%); max-height:160px; width:auto; object-fit:contain; filter:drop-shadow(0 4px 24px rgba(0,0,0,0.9)) drop-shadow(0 2px 8px rgba(0,0,0,0.7)); margin-bottom:16px; display:block; animation:logoFadeIn 0.5s ease; }
+  @keyframes logoFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .movie-meta { display:flex; align-items:center; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+  .meta-rating { display:flex; align-items:center; gap:6px; font-size:0.9rem; font-weight:700; color:var(--accent); transition:color 0.8s ease; }
+  .meta-item { display:flex; align-items:center; gap:5px; font-size:0.82rem; color:rgba(255,255,255,0.5); }
+  .meta-dot { width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,0.25); }
+  .stars { display:flex; gap:2px; }
+  .star { font-size:0.75rem; }
+  .star.full  { color:var(--accent); }
+  .star.empty { color:rgba(255,255,255,0.2); }
+
+  .movie-desc { font-size:0.9rem; font-weight:300; color:rgba(255,255,255,0.62); line-height:1.75; max-width:480px; margin-bottom:28px; }
+
+  .movie-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  .btn-watch { display:flex; align-items:center; gap:10px; background:var(--accent); color:#07070D; border:none; border-radius:10px; padding:14px 32px; font-family:'Outfit',sans-serif; font-size:0.92rem; font-weight:700; cursor:pointer; transition:all var(--t); box-shadow:0 4px 20px var(--accent-glow); letter-spacing:0.02em; }
+  .btn-watch:hover { filter:brightness(1.1); transform:translateY(-1px); }
+  .btn-list  { display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.14); border-radius:10px; padding:14px 24px; font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:600; cursor:pointer; transition:all var(--t); }
+  .btn-list:hover { background:rgba(255,255,255,0.14); transform:translateY(-1px); }
+
+  /* Poster flutuante */
+  .poster-float { position:absolute; right:80px; bottom:80px; width:190px; z-index:3; animation:posterIn 0.8s 0.3s ease both; opacity:0; }
+  @keyframes posterIn { from{opacity:0;transform:translateY(20px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+  .poster-float img { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:14px; box-shadow:0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07); }
+
+  /* ══ DETALHES ══ */
+  .details-section { padding:56px 80px 40px; display:grid; grid-template-columns:1fr 300px; gap:60px; }
+
+  .section-label { font-size:0.7rem; font-weight:700; color:rgba(255,255,255,0.3); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+  .section-label::before { content:''; width:3px; height:14px; background:var(--accent); border-radius:99px; transition:background 0.8s ease; }
+
+  .cast-grid { display:flex; gap:16px; flex-wrap:wrap; }
+  .cast-card { display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; transition:transform var(--t); }
+  .cast-card:hover { transform:translateY(-3px); }
+  .cast-avatar { width:62px; height:62px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.08); transition:border-color var(--t); background:var(--bg2); }
+  .cast-card:hover .cast-avatar { border-color:var(--accent); }
+  .cast-name { font-size:0.7rem; font-weight:500; color:rgba(255,255,255,0.55); text-align:center; max-width:72px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .info-panel { display:flex; flex-direction:column; gap:22px; }
+  .info-label { font-size:0.67rem; font-weight:700; color:rgba(255,255,255,0.28); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px; }
+  .info-value { font-size:0.88rem; color:rgba(255,255,255,0.72); line-height:1.5; }
+  .info-value.accent { color:var(--accent); font-weight:600; }
+  .genre-tags { display:flex; gap:6px; flex-wrap:wrap; }
+  .genre-tag { background:rgba(var(--accent-rgb),0.08); border:1px solid rgba(var(--accent-rgb),0.18); border-radius:99px; padding:4px 12px; font-size:0.7rem; font-weight:600; color:var(--accent); transition:all 0.8s ease; }
+
+  /* ══ SEMELHANTES ══ */
+  .similar-section { padding:0 80px 80px; }
+  .similar-title { font-size:1rem; font-weight:700; color:#fff; display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+  .similar-title::before { content:''; width:3px; height:18px; background:var(--accent); border-radius:99px; box-shadow:0 0 8px var(--accent-glow); transition:all 0.8s ease; }
+
+  .similar-carousel { display:flex; gap:14px; overflow-x:auto; scroll-behavior:smooth; padding-bottom:12px; scrollbar-width:none; cursor:grab; user-select:none; }
+  .similar-carousel::-webkit-scrollbar { display:none; }
+  .similar-carousel.grabbing { cursor:grabbing; scroll-behavior:auto; }
+
+  .sim-card { flex-shrink:0; width:175px; position:relative; border-radius:12px; overflow:visible; cursor:pointer; transition:transform 0.3s ease; }
+  .sim-card:hover { transform:scale(1.08); z-index:10; }
+  .sim-poster { width:100%; aspect-ratio:2/3; object-fit:cover; border-radius:12px; display:block; background:var(--bg2); transition:box-shadow 0.3s ease; }
+  .sim-card:hover .sim-poster { box-shadow:0 12px 40px rgba(var(--accent-rgb),0.2), 0 20px 50px rgba(0,0,0,0.6); }
+  .sim-overlay { position:absolute; inset:0; border-radius:12px; background:linear-gradient(to top,rgba(7,7,13,0.95) 0%,transparent 55%); opacity:0; transition:opacity 0.3s ease; padding:10px; display:flex; flex-direction:column; justify-content:flex-end; }
+  .sim-card:hover .sim-overlay { opacity:1; }
+  .sim-play { position:absolute; top:50%; left:50%; transform:translate(-50%,-60%); width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.12); backdrop-filter:blur(8px); border:1.5px solid rgba(255,255,255,0.28); display:flex; align-items:center; justify-content:center; font-size:0.9rem; transition:all 0.3s ease; opacity:0; }
+  .sim-card:hover .sim-play { opacity:1; transform:translate(-50%,-50%); }
+  .sim-play:hover { background:var(--accent) !important; border-color:var(--accent); color:#07070D; }
+  .sim-name { font-size:0.74rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; }
+  .sim-meta { font-size:0.63rem; color:rgba(255,255,255,0.4); }
+
+  /* Animações */
+  .fade-in { opacity:0; animation:fadeUp 0.6s ease forwards; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <a href="home.html" class="logo">
+      <img src="assets/images/logo.png" alt="Cygnus">
+      <span class="logo-text">CYGNUS</span>
+    </a>
+    <a href="home.html" class="back-btn">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      Voltar
+    </a>
+  </div>
+  <a href="profiles.html" class="profile-pill">
+    <img src="https://i.pravatar.cc/150?img=11" alt="Lucas" id="profileAvatar">
+    <span id="profileName">Lucas</span>
+  </a>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <a href="home.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg></span>
+    <span class="sidebar-label">Início</span>
+  </a>
+  <a href="catalog.html?type=movie" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125V6m0 0L3 5.25m0 .75l.375-.75M3 6h18"/></svg></span>
+    <span class="sidebar-label">Filmes</span>
+  </a>
+  <a href="catalog.html?type=tv" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"/></svg></span>
+    <span class="sidebar-label">Séries</span>
+  </a>
+  <a href="my-list.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></span>
+    <span class="sidebar-label">Minha Lista</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <a href="catalog.html?sort=popularity.desc" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.047 8.287 8.287 0 009 9.601a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"/></svg></span>
+    <span class="sidebar-label">Em Alta</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <a href="profiles.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg></span>
+    <span class="sidebar-label">Perfis</span>
+  </a>
+  <a href="#" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+    <span class="sidebar-label">Configurações</span>
+  </a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <div class="movie-hero">
+    <div class="movie-hero-bg" id="heroBg"></div>
+    <div class="movie-hero-overlay"></div>
+    <div class="movie-hero-content fade-in">
+      <div class="movie-badges" id="movieBadges"></div>
+      <h1 class="movie-title" id="movieTitle">Carregando...</h1>
+      <div class="movie-meta" id="movieMeta"></div>
+      <p class="movie-desc" id="movieDesc"></p>
+      <div class="movie-actions">
+        <button class="btn-watch" onclick="playMovie()">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          Assistir agora
+        </button>
+        <button class="btn-list" id="btnList">
+          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+          Minha lista
+        </button>
+      </div>
+    </div>
+    <div class="poster-float">
+      <img id="posterImg" src="" alt="Poster">
+    </div>
+  </div>
+
+  <!-- ELENCO + INFO -->
+  <div class="details-section fade-in" style="animation-delay:0.15s">
+    <div>
+      <p class="section-label">Elenco Principal</p>
+      <div class="cast-grid" id="castGrid"></div>
+    </div>
+    <div class="info-panel" id="infoPanel"></div>
+  </div>
+
+  <!-- SEMELHANTES -->
+  <div class="similar-section fade-in" style="animation-delay:0.3s">
+    <p class="similar-title">Títulos Semelhantes</p>
+    <div class="similar-carousel" id="simCarousel"></div>
+  </div>
+
+</div>
+
+<script src="js/api/tmdb.js"></script>
+<script src="js/utils/storage.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/router.js"></script>
+<script src="js/components/sidebar.js"></script>
+<script src="js/pages/details.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

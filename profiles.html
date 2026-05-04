@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus — Perfis</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #F5C518;
+    --accent-glow: rgba(245, 197, 24, 0.4);
+    --bg: #07070D;
+    --sidebar-w: 288px;
+    --t: 0.25s ease;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  /* ══ OVERLAY DE TRANSIÇÃO ══ */
+  .transition-overlay {
+    position: fixed;
+    inset: 0;
+    background: #07070D;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+  .transition-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ══ LAYOUT ══ */
+  .layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ══ SIDEBAR ══ */
+  .sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: rgba(5, 5, 10, 0.96);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 22px 24px;
+    z-index: 10;
+    position: relative;
+  }
+
+  .sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 1px; height: 100%;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      var(--accent-glow) 30%,
+      var(--accent-glow) 70%,
+      transparent 100%
+    );
+    transition: background 0.8s ease;
+  }
+
+  /* Logo */
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    text-decoration: none;
+  }
+
+  .sidebar-logo img {
+    width: 34px; height: 34px;
+    object-fit: contain;
+    border-radius: 8px;
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+  }
+
+  .sidebar-logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.88rem;
+    letter-spacing: 0.5em;
+    text-indent: 0.5em;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* Heading */
+  .sidebar-heading {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .sidebar-heading p {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.28);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .sidebar-heading h2 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  /* Perfis */
+  .profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .profiles-list::-webkit-scrollbar { display: none; }
+
+  .profile-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 11px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all var(--t);
+    position: relative;
+    border: 2px solid transparent;
+    user-select: none;
+  }
+
+  .profile-item:hover {
+    background: rgba(255,255,255,0.055);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow), inset 0 0 20px rgba(245,197,24,0.03);
+    transform: translateX(4px);
+  }
+
+  .profile-item.active {
+    background: rgba(255,255,255,0.055);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow), inset 0 0 20px rgba(245,197,24,0.03);
+    transform: translateX(4px);
+  }
+
+  .profile-avatar {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    background: #1a1a2e;
+    transition: border-color var(--t), box-shadow var(--t), transform var(--t);
+    display: block;
+  }
+
+  .profile-item:hover .profile-avatar,
+  .profile-item.active .profile-avatar {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+    transform: scale(1.05);
+  }
+
+  .profile-name {
+    font-size: 0.93rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
+    transition: color var(--t);
+    flex: 1;
+  }
+
+  .profile-item:hover .profile-name { color: var(--accent); font-weight: 600; }
+  .profile-item.active .profile-name { color: rgba(255,255,255,0.7); }
+
+  /* Perfil infantil */
+  .profile-item.kids .profile-name { color: #4FC3F7; }
+  .profile-item.kids:hover .profile-name { color: #81D4FA; }
+  .profile-item.kids:hover,
+  .profile-item.kids.active {
+    border-color: #4FC3F7 !important;
+    box-shadow: 0 0 20px rgba(79,195,247,0.3) !important;
+  }
+  .profile-item.kids:hover .profile-avatar,
+  .profile-item.kids.active .profile-avatar {
+    border-color: #4FC3F7 !important;
+    box-shadow: 0 0 12px rgba(79,195,247,0.4) !important;
+  }
+
+  /* Adicionar perfil */
+  .profile-item.add-profile .profile-avatar-placeholder {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    border: 2px dashed rgba(255,255,255,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.28);
+    transition: all var(--t);
+    flex-shrink: 0;
+  }
+  .profile-item.add-profile:hover .profile-avatar-placeholder {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .profile-item.add-profile .profile-name { color: rgba(255,255,255,0.35); font-size: 0.83rem; }
+  .profile-item.add-profile:hover { border-color: var(--accent) !important; }
+
+  /* Ripple */
+  .sound-ripple {
+    position: absolute;
+    left: 11px; top: 50%;
+    transform: translateY(-50%);
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sound-ripple.animate {
+    animation: ripplePulse 0.6s ease-out forwards;
+  }
+  @keyframes ripplePulse {
+    0%   { opacity: 0.8; transform: translateY(-50%) scale(1); }
+    100% { opacity: 0;   transform: translateY(-50%) scale(1.6); }
+  }
+
+  /* Botão editar */
+  .profile-edit-btn {
+    position: absolute;
+    right: 10px; top: 50%;
+    transform: translateY(-50%);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all var(--t);
+    flex-shrink: 0;
+  }
+  .profile-item:hover .profile-edit-btn { opacity: 1; }
+  .profile-edit-btn:hover { background: var(--accent); color: #07070D; transform: translateY(-50%) scale(1.1); }
+
+  /* ── Botão de entrada ── */
+  .sidebar-enter {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+  }
+  .sidebar-enter.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+  .btn-enter {
+    width: 100%;
+    background: var(--accent);
+    color: #07070D;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(245,197,24,0.3);
+    transition: all 0.2s ease;
+  }
+  .btn-enter:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 6px 26px rgba(245,197,24,0.45);
+    transform: translateY(-1px);
+  }
+  .btn-enter:active { transform: translateY(0); }
+
+  /* Botão voltar */
+  .sidebar-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 0.77rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    transition: all var(--t);
+    margin-top: 14px;
+    border: 1px solid transparent;
+  }
+  .sidebar-back:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* ══ ÁREA PRINCIPAL ══ */
+  .main-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Slides */
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+    transform: scale(1.04);
+  }
+  .slide.active  { opacity: 1; transform: scale(1);    z-index: 2; }
+  .slide.leaving { opacity: 0; transform: scale(0.98); z-index: 1; }
+
+  .slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, rgba(5,5,10,0.92) 0%, rgba(5,5,10,0.5) 45%, rgba(5,5,10,0.1) 100%),
+      linear-gradient(to top, rgba(5,5,10,0.8) 0%, transparent 40%);
+  }
+
+  /* Partículas */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.6);
+    animation: floatParticle linear infinite;
+  }
+  @keyframes floatParticle {
+    0%   { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10%  { opacity: 0.4; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-20vh) translateX(30px); opacity: 0; }
+  }
+
+  /* Logo oficial no slide */
+  .slide-logo {
+    max-width: min(460px, 65%);
+    max-height: 130px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.9)) drop-shadow(0 2px 8px rgba(0,0,0,0.7));
+    margin-bottom: 16px;
+    display: block;
+    animation: logoFadeIn 0.5s ease;
+  }
+  @keyframes logoFadeIn {
+    from { opacity:0; transform:translateY(8px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* Conteúdo do slide */
+  .slide-content {
+    position: absolute;
+    bottom: 80px;
+    left: 52px;
+    right: 40%;
+    z-index: 3;
+  }
+
+  .slide-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
+  }
+  .slide-year  { color: var(--accent); font-weight: 600; }
+  .slide-dot   { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.4); }
+  .slide-genre { color: rgba(255,255,255,0.55); }
+
+  .slide-title {
+    font-size: clamp(2.8rem, 5vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: #fff;
+    margin-bottom: 16px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  }
+
+  .slide-desc {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.75;
+    max-width: 480px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Barra de progresso */
+  .progress-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    z-index: 5;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+
+  /* Modo infantil */
+  body.kids-mode .slide-overlay {
+    background:
+      linear-gradient(to right, rgba(5,5,10,0.88) 0%, rgba(5,5,10,0.45) 45%, rgba(5,5,10,0.05) 100%),
+      linear-gradient(to top, rgba(5,5,10,0.7) 0%, transparent 40%);
+  }
+
+  /* ══ MODAL ══ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: #0E0E18;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 36px 40px;
+    width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.3s ease;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .modal-title { font-size: 1.3rem; font-weight: 700; }
+
+  .modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+  .avatar-preview-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .avatar-preview {
+    width: 90px; height: 90px;
+    border-radius: 16px;
+    object-fit: contain;
+    background: #1a1a2e;
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .avatar-preview-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.06em;
+  }
+
+  .avatar-grid-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .avatar-option {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #1a1a2e;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    opacity: 0.65;
+  }
+  .avatar-option:hover { transform: scale(1.08); opacity: 1; border-color: rgba(245,197,24,0.45); }
+  .avatar-option.selected { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); opacity: 1; transform: scale(1.05); }
+
+  .field-modal { margin-bottom: 20px; }
+  .field-modal label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .field-modal input {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.95rem;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  .field-modal input::placeholder { color: rgba(255,255,255,0.2); }
+  .field-modal input:focus {
+    border-color: rgba(245,197,24,0.45);
+    background: rgba(255,255,255,0.09);
+    box-shadow: 0 0 0 3px rgba(245,197,24,0.07);
+  }
+
+  .kids-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    cursor: pointer;
+  }
+  .kids-toggle-info { flex: 1; }
+  .kids-toggle-title { font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 2px; }
+  .kids-toggle-sub   { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+
+  .toggle-pill {
+    width: 40px; height: 22px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    transition: background 0.25s ease;
+    flex-shrink: 0;
+  }
+  .toggle-pill.on { background: #4FC3F7; }
+  .toggle-pill::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.25s ease;
+  }
+  .toggle-pill.on::after { transform: translateX(18px); }
+
+  .modal-actions { display: flex; gap: 12px; }
+
+  .btn-modal-save {
+    flex: 1;
+    background: var(--accent);
+    color: #07070D;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+  .btn-modal-save:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+  .btn-modal-cancel {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 13px 20px;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-modal-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+  .btn-modal-delete {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(239,68,68,0.65);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-modal-delete:hover { background: rgba(239,68,68,0.18); color: #ef4444; }
+</style>
+</head>
+<body>
+
+<!-- Overlay de transição de saída -->
+<div class="transition-overlay" id="transitionOverlay"></div>
+
+<div class="layout">
+
+  <!-- ══ SIDEBAR ══ -->
+  <div class="sidebar">
+    <a href="home.html" class="sidebar-logo">
+      <img src="assets/images/logo.png" alt="Cygnus">
+      <span class="sidebar-logo-text">CYGNUS</span>
+    </a>
+
+    <div class="sidebar-heading">
+      <p>Quem está</p>
+      <h2>assistindo?</h2>
+    </div>
+
+    <div class="profiles-list">
+
+      <div class="profile-item" data-profile="lucas" onclick="selectProfile(this)">
+        <div class="sound-ripple"></div>
+        <img class="profile-avatar"
+          src="https://api.dicebear.com/7.x/adventurer/svg?seed=Lucas&backgroundColor=b6e3f4&radius=10"
+          alt="Lucas">
+        <span class="profile-name">Lucas</span>
+        <button class="profile-edit-btn" onclick="editProfile(event, this)" title="Editar">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-item" data-profile="maria" onclick="selectProfile(this)">
+        <div class="sound-ripple"></div>
+        <img class="profile-avatar"
+          src="https://api.dicebear.com/7.x/adventurer/svg?seed=Maria&backgroundColor=ffd5dc&radius=10"
+          alt="Maria">
+        <span class="profile-name">Maria</span>
+        <button class="profile-edit-btn" onclick="editProfile(event, this)" title="Editar">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-item" data-profile="rafael" onclick="selectProfile(this)">
+        <div class="sound-ripple"></div>
+        <img class="profile-avatar"
+          src="https://api.dicebear.com/7.x/lorelei/svg?seed=Rafael&backgroundColor=c0aede&radius=10"
+          alt="Rafael">
+        <span class="profile-name">Rafael</span>
+        <button class="profile-edit-btn" onclick="editProfile(event, this)" title="Editar">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-item kids" data-profile="kids" onclick="selectProfile(this)">
+        <div class="sound-ripple" style="border-color:#4FC3F7"></div>
+        <img class="profile-avatar"
+          src="https://api.dicebear.com/7.x/adventurer/svg?seed=kids&backgroundColor=b6e3f4&radius=10"
+          alt="Infantil">
+        <span class="profile-name">Infantil</span>
+        <button class="profile-edit-btn" onclick="editProfile(event, this)" title="Editar">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-item add-profile" onclick="addProfile()">
+        <div class="profile-avatar-placeholder">+</div>
+        <span class="profile-name">Adicionar perfil</span>
+      </div>
+
+    </div>
+
+    <div class="sidebar-enter" id="sidebarEnter">
+      <button class="btn-enter" onclick="enterSelected()">
+        <span id="enterLabel">Entrar</span>
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </button>
+    </div>
+
+    <a href="login.html" class="sidebar-back">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      Trocar conta
+    </a>
+  </div>
+
+  <!-- ══ ÁREA PRINCIPAL ══ -->
+  <div class="main-area" id="mainArea">
+    <div class="particles" id="particles"></div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MODAL PERFIL ══ -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Adicionar perfil</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="avatar-preview-wrap">
+      <img class="avatar-preview" id="avatarPreview"
+        src="https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&backgroundColor=b6e3f4" alt="Avatar">
+      <span class="avatar-preview-label">Toque em um avatar para selecionar</span>
+    </div>
+
+    <p class="avatar-grid-title">Escolha um avatar</p>
+    <div class="avatar-grid" id="avatarGrid"></div>
+
+    <div class="field-modal">
+      <label>Nome do perfil</label>
+      <input type="text" id="profileNameInput" placeholder="Ex: João, Família, Kids...">
+    </div>
+
+    <div class="kids-toggle-row" onclick="toggleKidsMode()">
+      <div class="kids-toggle-info">
+        <div class="kids-toggle-title">Perfil Infantil</div>
+        <div class="kids-toggle-sub">Exibe apenas conteúdo adequado para crianças</div>
+      </div>
+      <div class="toggle-pill" id="kidsPill"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-modal-delete" id="deleteBtn" style="display:none" onclick="deleteProfile()">Excluir</button>
+      <button class="btn-modal-save" onclick="saveProfile()">Salvar perfil</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/utils/storage.js"></script>
+<script src="js/api/tmdb.js"></script>
+<script src="js/pages/profiles.js"></script>
+</body>
+</html>

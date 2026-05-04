@@ -1,0 +1,293 @@
+/* ============================================
+   CYGNUS — BASE CSS
+   Variáveis, reset, tipografia, utilitários
+   ============================================ */
+
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+/* ============================================
+   VARIÁVEIS GLOBAIS
+   ============================================ */
+:root {
+  /* Cores principais */
+  --bg-primary:       #0A0A0F;
+  --bg-secondary:     #12121A;
+  --bg-tertiary:      #1A1A26;
+
+  /* Accent */
+  --accent-yellow:    #F5C518;
+  --accent-gold:      #E8A000;
+  --accent-dim:       #B8860B;
+
+  /* Texto */
+  --text-primary:     #FFFFFF;
+  --text-secondary:   #8A8A9A;
+  --text-muted:       #4A4A5A;
+
+  /* Bordas */
+  --border-subtle:    #1E1E2E;
+  --border-glass:     rgba(245, 197, 24, 0.12);
+
+  /* Glass */
+  --glass-bg:         rgba(255, 255, 255, 0.04);
+  --glass-bg-medium:  rgba(255, 255, 255, 0.07);
+  --glass-bg-strong:  rgba(255, 255, 255, 0.10);
+  --glass-border:     rgba(255, 255, 255, 0.08);
+  --glass-blur:       blur(16px);
+  --glass-blur-light: blur(8px);
+  --glass-blur-heavy: blur(24px);
+
+  /* Sombras */
+  --shadow-sm:        0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md:        0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-lg:        0 8px 40px rgba(0, 0, 0, 0.8);
+  --shadow-glow:      0 0 24px rgba(245, 197, 24, 0.15);
+  --shadow-glow-md:   0 0 40px rgba(245, 197, 24, 0.25);
+
+  /* Sidebar */
+  --sidebar-width:        72px;
+  --sidebar-width-open:   220px;
+
+  /* Tipografia */
+  --font-main:        'Outfit', sans-serif;
+  --font-secondary:   'Space Grotesk', sans-serif;
+
+  /* Transições */
+  --transition-fast:  0.15s ease;
+  --transition-base:  0.25s ease;
+  --transition-slow:  0.4s ease;
+
+  /* Border radius */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   32px;
+  --radius-full: 9999px;
+
+  /* Z-index */
+  --z-sidebar:   100;
+  --z-modal:     200;
+  --z-toast:     300;
+  --z-splash:    999;
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-main);
+}
+
+input, textarea, select {
+  font-family: var(--font-main);
+  outline: none;
+  border: none;
+}
+
+/* ============================================
+   SCROLLBAR CUSTOMIZADA
+   ============================================ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-dim);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-yellow);
+}
+
+/* ============================================
+   TIPOGRAFIA
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-main);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 2vw, 1.8rem); }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+p {
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-accent {
+  color: var(--accent-yellow);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent-yellow);
+  color: #0A0A0F;
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  background: var(--accent-gold);
+  box-shadow: var(--shadow-glow-md);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-ghost:hover {
+  background: var(--glass-bg-medium);
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+}
+
+/* ============================================
+   UTILITÁRIOS
+   ============================================ */
+.flex        { display: flex; }
+.flex-col    { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm      { gap: 8px; }
+.gap-md      { gap: 16px; }
+.gap-lg      { gap: 24px; }
+
+.w-full      { width: 100%; }
+.h-full      { height: 100%; }
+.h-screen    { height: 100vh; }
+
+.hidden      { display: none !important; }
+.invisible   { visibility: hidden; }
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL (COM SIDEBAR)
+   ============================================ */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  transition: margin-left var(--transition-base);
+  padding: 32px;
+}
+
+.main-content.sidebar-open {
+  margin-left: var(--sidebar-width-open);
+}
+
+/* ============================================
+   ESTRELAS DE FUNDO (efeito espacial)
+   ============================================ */
+.starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(245, 197, 24, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(245, 197, 24, 0.02) 0%, transparent 50%),
+    var(--bg-primary);
+}
+
+/* ============================================
+   SELECTION COLOR
+   ============================================ */
+::selection {
+  background: rgba(245, 197, 24, 0.25);
+  color: var(--text-primary);
+}

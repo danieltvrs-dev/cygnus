@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus — Catálogo</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Montserrat:wght@100;200;300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent:      #F5C518;
+    --accent-rgb:  245,197,24;
+    --accent-glow: rgba(245,197,24,0.2);
+    --bg:          #07070D;
+    --bg2:         #0E0E18;
+    --bg3:         #13131F;
+    --sidebar-w:   64px;
+    --header-h:    68px;
+    --t:           0.25s ease;
+    --card-w:      200px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); font-family:'Outfit',sans-serif; color:#fff; min-height:100vh; }
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:99px; }
+
+  /* ══ HEADER ══ */
+  .header {
+    position:fixed; top:0; left:0; right:0; height:var(--header-h);
+    z-index:200; display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px 0 20px;
+    background:rgba(7,7,13,0.97); backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .header-left { display:flex; align-items:center; gap:20px; }
+  .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .logo img { width:36px; height:36px; object-fit:contain; border-radius:8px; }
+  .logo-text { font-family:'Montserrat',sans-serif; font-weight:200; font-size:0.9rem; letter-spacing:0.5em; text-indent:0.5em; color:rgba(255,255,255,0.82); }
+  .back-btn { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.85rem; font-weight:500; padding:7px 14px; border-radius:8px; transition:all var(--t); border:1px solid rgba(255,255,255,0.08); }
+  .back-btn:hover { color:#fff; background:rgba(255,255,255,0.06); }
+  .profile-pill { display:flex; align-items:center; gap:8px; padding:4px 10px 4px 4px; border-radius:10px; cursor:pointer; text-decoration:none; transition:background var(--t); }
+  .profile-pill:hover { background:rgba(255,255,255,0.06); }
+  .profile-pill img { width:34px; height:34px; border-radius:7px; object-fit:cover; border:2px solid var(--accent); box-shadow:0 0 10px var(--accent-glow); }
+  .profile-pill span { font-size:0.82rem; font-weight:500; color:rgba(255,255,255,0.7); }
+
+  /* ══ SIDEBAR ══ */
+  .sidebar { position:fixed; left:0; top:var(--header-h); bottom:0; width:var(--sidebar-w); z-index:150; background:rgba(7,7,13,0.5); backdrop-filter:blur(16px); border-right:1px solid rgba(255,255,255,0.04); display:flex; flex-direction:column; padding:20px 0; transition:width var(--t); overflow:hidden; }
+  .sidebar:hover { width:220px; background:rgba(7,7,13,0.97); border-right-color:rgba(245,197,24,0.1); }
+  .sidebar-item { display:flex; align-items:center; gap:14px; padding:12px 20px; cursor:pointer; transition:all var(--t); white-space:nowrap; border-left:2px solid transparent; text-decoration:none; color:rgba(255,255,255,0.4); }
+  .sidebar-item:hover { color:#fff; background:rgba(255,255,255,0.05); border-left-color:var(--accent); }
+  .sidebar-item.active { color:var(--accent); border-left-color:var(--accent); background:rgba(245,197,24,0.06); }
+  .sidebar-icon { flex-shrink:0; width:26px; display:flex; align-items:center; justify-content:center; }
+  .sidebar-icon svg { width:18px; height:18px; }
+  .sidebar-label { font-size:0.85rem; font-weight:500; opacity:0; transition:opacity 0.2s ease; }
+  .sidebar:hover .sidebar-label { opacity:1; }
+  .sidebar-divider { height:1px; background:rgba(255,255,255,0.06); margin:10px 14px; }
+
+  /* ══ MAIN ══ */
+  .main { margin-left:var(--sidebar-w); padding-top:var(--header-h); }
+
+  /* ══ CATALOG HEADER ══ */
+  .catalog-hero {
+    position:relative;
+    padding:48px 60px 0;
+    overflow:hidden;
+  }
+
+  /* Linha decorativa vertical */
+  .catalog-hero::before {
+    content:'';
+    position:absolute;
+    left:60px; top:0; bottom:0;
+    width:1px;
+    background:linear-gradient(to bottom, transparent, rgba(245,197,24,0.3), transparent);
+    pointer-events:none;
+  }
+
+  .catalog-eyebrow {
+    font-size:0.65rem; font-weight:700;
+    color:rgba(255,255,255,0.25);
+    letter-spacing:0.28em; text-transform:uppercase;
+    margin-bottom:10px; padding-left:20px;
+  }
+
+  .catalog-title {
+    font-family:'DM Serif Display', serif;
+    font-size:clamp(2.8rem, 5vw, 4.5rem);
+    font-weight:400;
+    line-height:1;
+    letter-spacing:-0.02em;
+    color:#fff;
+    padding-left:20px;
+    margin-bottom:6px;
+  }
+
+  .catalog-title em {
+    font-style:italic;
+    color:var(--accent);
+  }
+
+  .catalog-subtitle {
+    font-size:0.85rem; font-weight:300;
+    color:rgba(255,255,255,0.35);
+    padding-left:20px;
+    margin-bottom:32px;
+  }
+
+  /* ══ FILTROS ══ */
+  .filters-bar {
+    display:flex; align-items:center;
+    gap:0;
+    padding:0 60px;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .filters-bar::-webkit-scrollbar { display:none; }
+
+  .filter-group {
+    display:flex; align-items:center;
+    gap:0;
+    padding-right:24px;
+    margin-right:24px;
+    border-right:1px solid rgba(255,255,255,0.06);
+    flex-shrink:0;
+  }
+  .filter-group:last-child { border-right:none; }
+
+  .filter-group-label {
+    font-size:0.62rem; font-weight:700;
+    color:rgba(255,255,255,0.2);
+    letter-spacing:0.16em; text-transform:uppercase;
+    margin-right:10px; white-space:nowrap;
+  }
+
+  .filter-pill {
+    padding:8px 16px; border-radius:0;
+    border:none; border-bottom:2px solid transparent;
+    background:none;
+    font-family:'Outfit',sans-serif; font-size:0.8rem; font-weight:500;
+    color:rgba(255,255,255,0.4); cursor:pointer;
+    transition:all var(--t); white-space:nowrap;
+  }
+  .filter-pill:hover { color:rgba(255,255,255,0.75); }
+  .filter-pill.active { color:#fff; border-bottom-color:var(--accent); font-weight:600; }
+
+  /* ══ TOOLBAR (ordenação + resultados) ══ */
+  .toolbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 60px 0;
+    margin-bottom:28px;
+  }
+
+  .toolbar-left { display:flex; align-items:center; gap:12px; }
+
+  .results-label {
+    font-size:0.8rem; color:rgba(255,255,255,0.35);
+  }
+  .results-label strong { color:rgba(255,255,255,0.7); font-weight:600; }
+
+  /* Toggle view */
+  .view-toggle {
+    display:flex; gap:2px;
+    background:rgba(255,255,255,0.05);
+    border-radius:8px; padding:3px;
+  }
+  .view-btn {
+    width:30px; height:30px; border-radius:6px;
+    background:none; border:none; color:rgba(255,255,255,0.3);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:all var(--t);
+  }
+  .view-btn:hover { color:rgba(255,255,255,0.7); }
+  .view-btn.active { background:rgba(255,255,255,0.1); color:#fff; }
+  .view-btn svg { width:14px; height:14px; }
+
+  .toolbar-right { display:flex; align-items:center; gap:10px; }
+
+  .sort-label { font-size:0.78rem; color:rgba(255,255,255,0.3); }
+  .sort-select {
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:8px; padding:7px 14px;
+    font-family:'Outfit',sans-serif; font-size:0.78rem; color:#fff;
+    outline:none; cursor:pointer; transition:all var(--t);
+  }
+  .sort-select:hover { border-color:rgba(255,255,255,0.15); }
+
+  /* ══ GRID DE FILMES ══ */
+  .catalog-grid-wrap { padding:0 60px 80px; }
+
+  .catalog-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(var(--card-w),1fr));
+    gap:20px;
+  }
+
+  .catalog-grid.list-view {
+    grid-template-columns:1fr;
+    gap:4px;
+  }
+
+  /* ── Card (grid) ── */
+  .movie-card {
+    position:relative; border-radius:12px;
+    overflow:visible; cursor:pointer;
+    transition:transform 0.3s ease;
+    animation:cardIn 0.4s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(16px) scale(0.96); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .movie-card:hover { transform:scale(1.06); z-index:10; }
+
+  .movie-poster {
+    width:100%; aspect-ratio:2/3; object-fit:cover;
+    border-radius:12px; display:block; background:var(--bg2);
+    transition:box-shadow 0.3s ease;
+  }
+  .movie-card:hover .movie-poster {
+    box-shadow:0 16px 48px rgba(var(--accent-rgb),0.18), 0 24px 60px rgba(0,0,0,0.7);
+  }
+
+  .movie-hover {
+    position:absolute; inset:0; border-radius:12px;
+    background:linear-gradient(to top, rgba(7,7,13,0.97) 0%, rgba(7,7,13,0.3) 50%, transparent 75%);
+    opacity:0; transition:opacity 0.3s ease;
+    padding:14px; display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .movie-card:hover .movie-hover { opacity:1; }
+
+  .movie-play {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-65%);
+    width:46px; height:46px; border-radius:50%;
+    background:rgba(255,255,255,0.12); backdrop-filter:blur(10px);
+    border:1.5px solid rgba(255,255,255,0.3);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; transition:all 0.3s ease; opacity:0;
+  }
+  .movie-card:hover .movie-play { opacity:1; transform:translate(-50%,-50%); }
+  .movie-play:hover { background:var(--accent) !important; border-color:var(--accent); color:#07070D; }
+
+  .movie-title { font-size:0.78rem; font-weight:700; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .movie-meta  { display:flex; align-items:center; gap:6px; font-size:0.65rem; color:rgba(255,255,255,0.45); }
+  .movie-rating { color:var(--accent); font-weight:600; }
+  .movie-type-badge {
+    position:absolute; top:10px; left:10px;
+    background:rgba(7,7,13,0.8); backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:5px; padding:2px 7px;
+    font-size:0.6rem; font-weight:700;
+    color:rgba(255,255,255,0.6); letter-spacing:0.06em;
+    opacity:0; transition:opacity var(--t);
+  }
+  .movie-card:hover .movie-type-badge { opacity:1; }
+
+  /* ── Card (list view) ── */
+  .catalog-grid.list-view .movie-card {
+    border-radius:10px;
+    transform:none !important;
+  }
+  .catalog-grid.list-view .movie-card:hover { background:rgba(255,255,255,0.04); }
+
+  .list-card-inner {
+    display:none;
+    align-items:center; gap:16px;
+    padding:10px 12px;
+    border-radius:10px;
+  }
+  .catalog-grid.list-view .list-card-inner { display:flex; }
+  .catalog-grid.list-view .movie-poster { display:none; }
+  .catalog-grid.list-view .movie-hover { display:none; }
+  .catalog-grid.list-view .movie-play { display:none; }
+  .catalog-grid.list-view .movie-type-badge { display:none; }
+
+  .list-thumb {
+    width:54px; height:80px; object-fit:cover;
+    border-radius:7px; flex-shrink:0; background:var(--bg2);
+  }
+
+  .list-info { flex:1; min-width:0; }
+  .list-title { font-size:0.92rem; font-weight:600; margin-bottom:4px; }
+  .list-meta  { font-size:0.75rem; color:rgba(255,255,255,0.4); display:flex; gap:10px; }
+  .list-rating { color:var(--accent); }
+  .list-desc  { font-size:0.78rem; color:rgba(255,255,255,0.35); margin-top:4px; line-clamp:1; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:600px; }
+
+  .list-play {
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+    color:rgba(255,255,255,0.4); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all var(--t); flex-shrink:0;
+  }
+  .list-play:hover { background:var(--accent); border-color:var(--accent); color:#07070D; }
+  .list-play svg { width:14px; height:14px; }
+
+  /* ══ LOADING ══ */
+  .loading-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(var(--card-w),1fr));
+    gap:20px;
+    padding:0 60px 80px;
+  }
+
+  .skeleton {
+    background:linear-gradient(90deg, var(--bg2) 25%, rgba(255,255,255,0.04) 50%, var(--bg2) 75%);
+    background-size:200% 100%;
+    animation:shimmer 1.4s infinite;
+    border-radius:12px; aspect-ratio:2/3;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* ══ LOAD MORE ══ */
+  .load-more-wrap { display:flex; justify-content:center; padding:20px 0 60px; }
+  .load-more-btn {
+    padding:12px 40px; border-radius:99px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    font-family:'Outfit',sans-serif; font-size:0.85rem; font-weight:600;
+    color:rgba(255,255,255,0.6); cursor:pointer;
+    transition:all var(--t); display:flex; align-items:center; gap:8px;
+  }
+  .load-more-btn:hover { background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.2); }
+  .load-more-btn.loading { pointer-events:none; opacity:0.5; }
+
+  /* ══ EMPTY ══ */
+  .empty-wrap { display:flex; flex-direction:column; align-items:center; padding:80px; text-align:center; }
+  .empty-wrap svg { width:48px; height:48px; color:rgba(255,255,255,0.1); margin-bottom:16px; }
+  .empty-wrap h3 { font-size:1.2rem; font-weight:700; margin-bottom:8px; }
+  .empty-wrap p  { font-size:0.85rem; color:rgba(255,255,255,0.35); }
+
+  /* Genre chips horizontais */
+  .genre-chips {
+    display:flex; align-items:center; gap:6px;
+    overflow-x:auto; scrollbar-width:none; padding-bottom:0;
+  }
+  .genre-chips::-webkit-scrollbar { display:none; }
+  .genre-chip {
+    padding:6px 14px; border-radius:99px; flex-shrink:0;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.04);
+    font-family:'Outfit',sans-serif; font-size:0.75rem; font-weight:500;
+    color:rgba(255,255,255,0.45); cursor:pointer;
+    transition:all var(--t);
+  }
+  .genre-chip:hover { border-color:rgba(255,255,255,0.18); color:#fff; }
+  .genre-chip.active { border-color:var(--accent); color:var(--accent); background:rgba(245,197,24,0.08); }
+
+  /* Linha decorativa entre filtros e grid */
+  .section-divider {
+    height:1px;
+    background:linear-gradient(to right, transparent, rgba(245,197,24,0.2), transparent);
+    margin:0 60px 28px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <a href="home.html" class="logo">
+      <img src="assets/images/logo.png" alt="Cygnus">
+      <span class="logo-text">CYGNUS</span>
+    </a>
+    <a href="home.html" class="back-btn">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+      Início
+    </a>
+  </div>
+  <a href="profiles.html" class="profile-pill">
+    <img src="https://i.pravatar.cc/150?img=11" alt="Lucas" id="profileAvatar">
+    <span id="profileName">Lucas</span>
+  </a>
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <a href="home.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg></span>
+    <span class="sidebar-label">Início</span>
+  </a>
+  <a href="#" class="sidebar-item active">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125V6m0 0L3 5.25m0 .75l.375-.75M3 6h18"/></svg></span>
+    <span class="sidebar-label">Catálogo</span>
+  </a>
+  <a href="search.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg></span>
+    <span class="sidebar-label">Busca</span>
+  </a>
+  <a href="my-list.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg></span>
+    <span class="sidebar-label">Minha Lista</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <a href="profiles.html" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg></span>
+    <span class="sidebar-label">Perfis</span>
+  </a>
+  <a href="#" class="sidebar-item">
+    <span class="sidebar-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+    <span class="sidebar-label">Configurações</span>
+  </a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CATALOG HERO -->
+  <div class="catalog-hero">
+    <p class="catalog-eyebrow">Explorar</p>
+    <h1 class="catalog-title">O <em>universo</em> completo</h1>
+    <p class="catalog-subtitle" id="catalogSubtitle">Carregando catálogo...</p>
+  </div>
+
+  <!-- FILTROS PRINCIPAIS -->
+  <div class="filters-bar" id="filtersBar">
+    <div class="filter-group">
+      <span class="filter-group-label">Tipo</span>
+      <button class="filter-pill active" onclick="setType('all',this)">Tudo</button>
+      <button class="filter-pill" onclick="setType('movie',this)">Filmes</button>
+      <button class="filter-pill" onclick="setType('tv',this)">Séries</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-group-label">Período</span>
+      <button class="filter-pill active" onclick="setYear('all',this)">Todos</button>
+      <button class="filter-pill" onclick="setYear('2024',this)">2024</button>
+      <button class="filter-pill" onclick="setYear('2023',this)">2023</button>
+      <button class="filter-pill" onclick="setYear('2020',this)">2020s</button>
+      <button class="filter-pill" onclick="setYear('2010',this)">2010s</button>
+      <button class="filter-pill" onclick="setYear('2000',this)">2000s</button>
+      <button class="filter-pill" onclick="setYear('classic',this)">Clássicos</button>
+    </div>
+  </div>
+
+  <!-- GENRE CHIPS -->
+  <div style="padding:16px 60px 20px; border-bottom:1px solid rgba(255,255,255,0.04);">
+    <div class="genre-chips" id="genreChips"></div>
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="section-divider"></div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <p class="results-label" id="resultsLabel">Carregando...</p>
+    </div>
+    <div class="toolbar-right">
+      <div class="view-toggle">
+        <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grade">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+        </button>
+        <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="Lista">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+        </button>
+      </div>
+      <span class="sort-label">Ordenar</span>
+      <select class="sort-select" id="sortSelect" onchange="applySort()">
+        <option value="popularity.desc">Mais Populares</option>
+        <option value="vote_average.desc">Melhor Avaliados</option>
+        <option value="release_date.desc">Mais Recentes</option>
+        <option value="release_date.asc">Mais Antigos</option>
+        <option value="revenue.desc">Maior Bilheteria</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- LOADING SKELETONS -->
+  <div class="loading-grid" id="loadingGrid">
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+  </div>
+
+  <!-- CATALOG GRID -->
+  <div class="catalog-grid-wrap" id="catalogWrap" style="display:none">
+    <div class="catalog-grid" id="catalogGrid"></div>
+  </div>
+
+  <!-- EMPTY -->
+  <div class="empty-wrap" id="emptyWrap" style="display:none">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75.125V6m0 0L3 5.25m0 .75l.375-.75M3 6h18"/></svg>
+    <h3>Nenhum título encontrado</h3>
+    <p>Tente outros filtros ou categorias.</p>
+  </div>
+
+  <!-- LOAD MORE -->
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+      Carregar mais
+    </button>
+  </div>
+
+</div>
+
+<script src="js/api/tmdb.js"></script>
+<script src="js/utils/storage.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/router.js"></script>
+<script src="js/components/card.js"></script>
+<script src="js/components/sidebar.js"></script>
+<script src="js/pages/catalog.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

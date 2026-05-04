@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cygnus — Aviso Legal</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: #07070D;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    overflow-x: hidden;
+  }
+
+  /* Gradiente sutil de fundo */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 20%, rgba(245,197,24,0.03) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(79,195,247,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Card principal */
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 48px;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: cardIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+  }
+  @keyframes cardIn {
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* Logo no topo */
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+  .logo-wrap img {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    filter: drop-shadow(0 0 8px rgba(245,197,24,0.3));
+  }
+  .logo-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 0.85rem;
+    letter-spacing: 0.45em;
+    text-indent: 0.45em;
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* Título da seção */
+  .section-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,197,24,0.6);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(245,197,24,0.15);
+  }
+
+  /* Blocos de texto */
+  .disclaimer-block {
+    margin-bottom: 22px;
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.025);
+    border-radius: 12px;
+    border-left: 2px solid rgba(255,255,255,0.08);
+  }
+  .disclaimer-block:last-of-type { margin-bottom: 0; }
+
+  .disclaimer-block p {
+    font-size: 0.88rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.75;
+  }
+
+  .disclaimer-block p strong {
+    font-weight: 600;
+    color: rgba(255,255,255,0.82);
+  }
+
+  /* Bloco TMDB com destaque */
+  .disclaimer-block.tmdb {
+    border-left-color: rgba(1,180,228,0.4);
+    background: rgba(1,180,228,0.04);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .tmdb-logo-wrap {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .tmdb-logo-wrap img {
+    height: 20px;
+    opacity: 0.7;
+  }
+
+  /* Divisor */
+  .divider {
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+    margin: 32px 0;
+  }
+
+  /* Botão continuar */
+  .btn-continue {
+    width: 100%;
+    background: var(--accent, #F5C518);
+    color: #07070D;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 24px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(245,197,24,0.25);
+    letter-spacing: 0.01em;
+  }
+  .btn-continue:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 28px rgba(245,197,24,0.35);
+  }
+  .btn-continue:active { transform: translateY(0); }
+
+  /* Fade de saída */
+  body.exiting { animation: fadeOut 0.4s ease forwards; }
+  @keyframes fadeOut { to { opacity:0; } }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo-wrap">
+    <img src="assets/images/logo.png" alt="Cygnus">
+    <span class="logo-name">CYGNUS</span>
+  </div>
+
+  <div class="section-label">Aviso Legal</div>
+
+  <div class="disclaimer-block">
+    <p>
+      Este projeto é um <strong>simulador de plataforma de streaming</strong> desenvolvido
+      exclusivamente para fins educacionais. Nenhum conteúdo exibido
+      está hospedado nesta aplicação.
+    </p>
+  </div>
+
+  <div class="disclaimer-block tmdb">
+    <div class="tmdb-logo-wrap">
+      <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg"
+        alt="TMDB">
+    </div>
+    <p>
+      Os dados de filmes e séries, incluindo imagens, títulos e descrições, são
+      fornecidos pela <strong>API do TMDB (The Movie Database)</strong>.
+      Este produto utiliza a API do TMDB, mas <strong>não é endossado ou certificado
+      pelo TMDB</strong>.
+    </p>
+  </div>
+
+  <div class="disclaimer-block">
+    <p>
+      Não há qualquer <strong>finalidade comercial</strong> ou geração de receita
+      associada a este projeto.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <button class="btn-continue" onclick="proceed()">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+    </svg>
+    Entendi, continuar
+  </button>
+
+</div>
+
+<script>
+function proceed() {
+  document.body.classList.add('exiting');
+  setTimeout(() => { window.location.href = 'login.html'; }, 380);
+}
+</script>
+</body>
+</html>
