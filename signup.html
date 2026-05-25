@@ -679,6 +679,21 @@
   .terms-row input[type=checkbox]:not(:checked) ~ label {
     color: var(--text-2);
   }
+
+  /* ══ RESPONSIVE ══ */
+  @media (max-width: 768px) {
+    body { overflow: auto; height: auto; min-height: 100vh; position: static; }
+    .topbar { padding: 0 20px; }
+    .topbar-logo span { display: none; }
+    .topbar-steps .step-label { display: none; }
+    .step { padding: 0 12px; }
+  }
+
+  @media (max-width: 480px) {
+    .topbar-steps { gap: 0; }
+    .step { padding: 0 8px; }
+    .step:not(:last-child)::after { width: 16px; }
+  }
 </style>
 </head>
 <body>
