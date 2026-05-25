@@ -676,6 +676,55 @@
     transition: all 0.2s ease;
   }
   .btn-modal-delete:hover { background: rgba(239,68,68,0.18); color: #ef4444; }
+
+  /* ══ RESPONSIVE ══ */
+  @media (max-width: 768px) {
+    :root { --sidebar-w: 100vw; }
+    body { overflow: auto; height: auto; }
+
+    .layout { flex-direction: column; height: auto; min-height: 100vh; }
+
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 20px 20px;
+      position: relative;
+    }
+    .sidebar::after { display: none; }
+    .sidebar-logo { margin-bottom: 20px; }
+
+    .main-area { display: none; }
+
+    .profiles-list {
+      max-height: none;
+      overflow-y: visible;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .profile-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      padding: 14px 10px;
+      transform: none !important;
+    }
+    .profile-item:hover { transform: none !important; }
+    .profile-edit-btn { display: none; }
+    .sound-ripple { display: none; }
+
+    .sidebar-enter { margin-top: 16px; }
+    .sidebar-back { justify-content: center; }
+  }
+
+  @media (max-width: 480px) {
+    .sidebar { padding: 20px 16px; }
+    .profile-avatar { width: 44px; height: 44px; }
+    .profile-name { font-size: 0.78rem; }
+  }
 </style>
 </head>
 <body>
